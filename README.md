@@ -168,3 +168,105 @@ The reader will try each class until one succeeds.
 - ROKAE Python SDK available in the Python environment
 - Network access from the host PC to the robot controller IPs
 
+---
+
+# 中文说明
+
+ROKAE Joint Reader 是一个用于读取 ROKAE 机器人控制器当前关节角的小工具。它提供命令行和 Tkinter 图形界面两种方式，可以读取关节角、基础控制器状态，并同时显示角度制和弧度制结果。
+
+## 功能
+
+- 读取一个或多个 ROKAE 控制器的当前关节角
+- 同时显示 degree 和 radian
+- 显示基础控制器状态，例如 power、operate mode、operation state
+- 支持 JSON 输出，方便脚本调用
+- 提供简单 GUI，支持单次读取和实时刷新
+- 只读工具，不发送上电、切模式、实时控制或运动指令
+
+## 默认适配
+
+默认配置面向一台轮式人形 ROKAE 平台，包含三个控制器：
+
+| 目标 | IP | 机器人 / 控制器 | SDK 类 |
+| --- | --- | --- | --- |
+| `right_arm` | `192.168.71.160` | `AR5-5_0.7R-W4C1C1` 右 7 轴机械臂 | `xMateErProRobot` |
+| `left_arm` | `192.168.71.161` | `AR5-5_0.7L-W4C1C1` 左 7 轴机械臂 | `xMateErProRobot` |
+| `taihu` | `192.168.71.254` | TaiHu 机身控制器 | `Robot_T_Industrial_4`，备用 `IndustrialRobot_4` |
+
+默认本机 IP：
+
+```text
+192.168.71.56
+```
+
+## 使用方式
+
+启动 GUI：
+
+```bash
+./ROKAE_Joint_Reader
+```
+
+也可以直接运行 Python GUI：
+
+```bash
+python read_rokae_joints_gui.py
+```
+
+命令行读取全部控制器：
+
+```bash
+python read_rokae_joints.py
+```
+
+读取指定目标：
+
+```bash
+python read_rokae_joints.py --target right_arm
+python read_rokae_joints.py --target left_arm
+python read_rokae_joints.py --target taihu
+```
+
+输出 JSON：
+
+```bash
+python read_rokae_joints.py --json
+```
+
+## 安全说明
+
+该工具设计为只读工具，只会创建 SDK 机器人对象、调用 `jointPos()`、读取基础状态并打印结果。
+
+它不会执行：
+
+- 上电或下电
+- 切换机器人模式
+- 清除报警
+- 启动实时控制
+- 发送运动目标
+
+## 适配其他 ROKAE 机器人
+
+主要修改 `read_rokae_joints.py` 中的 `DEFAULT_TARGETS`：
+
+```python
+RobotTarget(
+    name="right_arm",
+    ip="192.168.71.160",
+    sdk_classes=("xMateErProRobot",),
+    joint_labels=("J1", "J2", "J3", "J4", "J5", "J6", "J7"),
+)
+```
+
+需要根据实际机器人修改：
+
+- `name`：目标名称，对应命令行 `--target`
+- `ip`：控制器 IP 地址
+- `sdk_classes`：要尝试的 ROKAE SDK 类名
+- `joint_labels`：关节显示名称
+
+如果新增或删除目标，也需要同步修改 `read_rokae_joints_gui.py` 中的下拉框：
+
+```python
+values=("all", "right_arm", "left_arm", "taihu")
+```
