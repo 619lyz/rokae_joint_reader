@@ -1,0 +1,4 @@
+__pycache__/
+*.py[cod]
+logs/
+_rokae_log_/
