@@ -13,7 +13,7 @@ The tool provides both a Python CLI and a small Tkinter GUI. It connects through
 - Simple GUI with one-shot reading and live refresh
 - Read-only behavior: no power, mode, realtime, or motion commands are sent
 
-## Supported Setup
+## Supported Setup.
 
 The default configuration is prepared for a wheeled humanoid ROKAE platform with three controllers:
 
