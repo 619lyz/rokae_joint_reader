@@ -1,6 +1,6 @@
 # ROKAE Joint Reader
 
-A lightweight read-only utility for checking current joint angles from multiple ROKAE robot controllers.
+A lightweight read-only utility for checking current joint angles from multiple ROKAE robot controllers
 
 The tool provides both a Python CLI and a small Tkinter GUI. It connects through the ROKAE Python SDK, reads joint positions and basic controller state, and prints the result in degrees and radians.
 
